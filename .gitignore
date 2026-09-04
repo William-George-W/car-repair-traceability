@@ -1,0 +1,35 @@
+# Frontend dependencies and build output
+node_modules/
+dist/
+.vite/
+artifacts/
+cache/
+coverage/
+typechain-types/
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# Backend build output
+target/
+*.class
+data/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
