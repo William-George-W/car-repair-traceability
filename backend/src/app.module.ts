@@ -16,9 +16,10 @@ import { WarrantyRuleController } from "./warranty-rule.controller";
 import { WarrantyRuleService } from "./warranty-rule.service";
 import { WarrantyClaimController } from "./warranty-claim.controller";
 import { WarrantyClaimService } from "./warranty-claim.service";
+import { HealthController } from "./health.controller";
 
 @Module({
-  controllers: [AuthController, VehicleController, RepairController, StatisticsController, AdminController, BlockchainController, WarrantyRuleController, WarrantyClaimController],
+  controllers: [HealthController, AuthController, VehicleController, RepairController, StatisticsController, AdminController, BlockchainController, WarrantyRuleController, WarrantyClaimController],
   providers: [DatabaseService, AuthService, AuthGuard, BlockchainService, VehicleService, RepairService, AdminService, WarrantyRuleService, WarrantyClaimService],
 })
 export class AppModule {}

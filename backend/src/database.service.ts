@@ -30,11 +30,11 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     const options: PoolOptions = {
-      host: process.env.MYSQL_HOST || "127.0.0.1",
-      port: Number(process.env.MYSQL_PORT || 3306),
-      user: process.env.MYSQL_USERNAME || "root",
-      password: process.env.MYSQL_PASSWORD || "123456",
-      database: process.env.MYSQL_DATABASE || "repair_traceability",
+      host: process.env.MYSQL_HOST || process.env.MYSQLHOST || "127.0.0.1",
+      port: Number(process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306),
+      user: process.env.MYSQL_USERNAME || process.env.MYSQLUSER || "root",
+      password: process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD || "123456",
+      database: process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE || "repair_traceability",
       waitForConnections: true,
       connectionLimit: 10,
       dateStrings: true,

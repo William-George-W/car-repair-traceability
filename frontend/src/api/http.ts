@@ -20,7 +20,7 @@ http.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem("repair_token");
       localStorage.removeItem("repair_user");
-      window.location.href = "/login";
+      window.location.hash = "#/login";
     }
     return Promise.reject(error);
   }
