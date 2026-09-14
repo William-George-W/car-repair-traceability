@@ -1,5 +1,15 @@
 # 基于区块链的汽车维修记录可信验证与质保追溯系统
 
+## 在线演示
+
+- 系统入口：[GitHub Pages](https://william-george-w.github.io/car-repair-traceability/)
+- 后端健康检查：[Railway API](https://backend-production-4b75.up.railway.app/api/health)
+- 管理员：`demo_admin / 123456`
+- 车主：`demo_owner_shanghai / 123456`
+- 维修商：`demo_shop_huaxin / 123456`
+
+在线演示使用 Railway Node.js 服务和私有 MySQL 服务。数据库保留了本地 Geth 演示链产生的历史交易哈希、区块号、Chain ID 和合约地址；由于本地 Geth 不能从公网访问，云端关闭新的链上写入并明确显示链服务不可用。完整的新增存证与链上验证演示仍需在本地启动 Geth 后进行。
+
 ## 项目定位
 
 本系统面向车主、维修商和管理员，使用区块链保存维修记录摘要，使用数据库保存业务详情，实现汽车维修记录的防篡改验证、维修历史追溯和质保状态查询。
@@ -81,9 +91,10 @@ npm start
 ```bash
 cd backend
 npm run seed
+npm run seed:warranty
 ```
 
-该脚本会创建管理员演示账号 `demo_admin`、4 个车主、3 个维修商、8 辆车辆和 20 条维修记录，并包含批量演示数据。记录通过后端接口写入，会自动计算 Hash、提交 `RepairProof` 交易并生成异常检测结果；重复执行时会跳过已经存在的演示数据。演示账号密码默认是 `123456`，也可以通过 `SEED_PASSWORD` 环境变量修改。
+`seed` 会创建管理员演示账号 `demo_admin`、车主、维修商、车辆和批量维修记录。记录通过后端接口写入，会自动计算 Hash、尝试提交 `RepairProof` 交易并生成异常检测结果；重复执行时会跳过已经存在的演示数据。`seed:warranty` 会为现有链上凭证补充待受理、已受理、已完成和已驳回四种质保申请。演示账号密码默认是 `123456`，也可以通过 `SEED_PASSWORD` 环境变量修改。
 
 后端会自动读取被 Git 忽略的 `backend/.env`，首次启动时自动创建数据库和业务表。默认连接本机 MySQL 数据库 `repair_traceability`，本地密码配置示例见 `backend/.env.example`。
 
