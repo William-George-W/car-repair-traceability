@@ -6,6 +6,16 @@ require("dotenv").config({ path: path.resolve(__dirname, "..", ".env") });
 const API_BASE = process.env.SEED_API_BASE_URL || `http://127.0.0.1:${process.env.PORT || 8080}/api`;
 const PASSWORD = process.env.SEED_PASSWORD || "123456";
 
+function databaseConfig() {
+  return {
+    host: process.env.MYSQL_HOST || process.env.MYSQLHOST || "127.0.0.1",
+    port: Number(process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306),
+    user: process.env.MYSQL_USERNAME || process.env.MYSQLUSER || "root",
+    password: process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD || "123456",
+    database: process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE || "repair_traceability",
+  };
+}
+
 const users = [
   { username: "demo_admin", role: "ADMIN" },
   { username: "demo_owner_shanghai", role: "OWNER" },
@@ -272,13 +282,7 @@ async function ensureUser(user) {
 }
 
 async function ensureAdminUser(user) {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || "127.0.0.1",
-    port: Number(process.env.MYSQL_PORT || 3306),
-    user: process.env.MYSQL_USERNAME || "root",
-    password: process.env.MYSQL_PASSWORD || "123456",
-    database: process.env.MYSQL_DATABASE || "repair_traceability",
-  });
+  const connection = await mysql.createConnection(databaseConfig());
   try {
     const [rows] = await connection.query("SELECT id,role FROM sys_user WHERE username=? LIMIT 1", [user.username]);
     if (rows.length) {
@@ -333,13 +337,7 @@ async function ensureRepair(plan, token) {
 }
 
 async function readDatabaseCounts() {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || "127.0.0.1",
-    port: Number(process.env.MYSQL_PORT || 3306),
-    user: process.env.MYSQL_USERNAME || "root",
-    password: process.env.MYSQL_PASSWORD || "123456",
-    database: process.env.MYSQL_DATABASE || "repair_traceability",
-  });
+  const connection = await mysql.createConnection(databaseConfig());
   try {
     const counts = {};
     for (const table of ["sys_user", "vehicle", "repair_record", "abnormal_record"]) {
@@ -376,14 +374,15 @@ async function main() {
   const stats = await request("GET", "/statistics/repairs", undefined, tokens.demo_admin);
   const counts = await readDatabaseCounts();
   const minimumChecks = [
-    ["sys_user", counts.sys_user],
-    ["vehicle", counts.vehicle],
-    ["repair_record", counts.repair_record],
-    ["abnormal_record", counts.abnormal_record],
+    ["sys_user", counts.sys_user, 50],
+    ["vehicle", counts.vehicle, 50],
+    ["repair_record", counts.repair_record, 50],
+    // 异常记录应由风险规则自然产生，数量过高反而会降低演示数据的可信度。
+    ["abnormal_record", counts.abnormal_record, 20],
   ];
-  const belowMinimum = minimumChecks.filter(([, count]) => count < 50);
+  const belowMinimum = minimumChecks.filter(([, count, minimum]) => count < minimum);
   if (belowMinimum.length) {
-    throw new Error(`种子数据数量校验失败：${belowMinimum.map(([table, count]) => `${table}=${count}`).join(", ")}`);
+    throw new Error(`种子数据数量校验失败：${belowMinimum.map(([table, count, minimum]) => `${table}=${count}（至少 ${minimum}）`).join(", ")}`);
   }
   console.log(`完成：新增 ${created} 条维修记录，跳过已有 ${skipped} 条。`);
   console.log(`数据库总量：用户 ${counts.sys_user} 个，车辆 ${counts.vehicle} 辆，维修记录 ${counts.repair_record} 条，链上记录 ${counts.onChain} 条，异常记录 ${counts.abnormal_record} 条。`);
