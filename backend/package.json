@@ -11,6 +11,7 @@
     "build": "nest build",
     "start:prod": "node dist/main.js",
     "seed": "node scripts/seed-demo-data.cjs",
+    "seed:warranty": "node scripts/seed-warranty-claims.cjs",
     "cleanup:legacy": "node scripts/cleanup-legacy-test-data.cjs",
     "migrate:integrity": "node scripts/migrate-integrity.cjs",
     "sync:chain-metadata": "node scripts/sync-chain-metadata.cjs",
