@@ -31,7 +31,7 @@ export default function AppLayout() {
   const role = user.role as UserRole | undefined;
   const roleLabel = role ? roleLabels[role] : "用户";
   const adminSection = new URLSearchParams(location.search).get("section");
-  const routeMeta = location.pathname === "/"
+  const routeMeta = location.pathname === "/dashboard"
     ? { code: "CTRL / 01", title: "运行数据总览" }
     : location.pathname === "/vehicles"
       ? { code: "CTRL / 02", title: role === "OWNER" ? "我的车辆档案" : "全平台车辆档案" }
@@ -48,7 +48,7 @@ export default function AppLayout() {
                 : { code: "CTRL / 08", title: adminSection === "users" ? "账号管理" : adminSection === "repairs" ? "维修凭证管理" : adminSection === "warranty-rules" ? "质保规则" : adminSection === "logs" ? "操作日志" : "运营管理" };
 
   const menuItems: MenuProps["items"] = [
-    ...(role === "ADMIN" ? [{ key: "/", icon: <DashboardOutlined />, label: "数据概览" }] : []),
+    ...(role === "ADMIN" ? [{ key: "/dashboard", icon: <DashboardOutlined />, label: "数据概览" }] : []),
     ...((role === "OWNER" || role === "ADMIN") ? [{
       key: "vehicle-workspace",
       icon: <CarOutlined />,

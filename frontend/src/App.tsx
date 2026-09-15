@@ -12,13 +12,15 @@ import Verify from "./pages/Verify";
 import Abnormal from "./pages/Abnormal";
 import AdminManagement from "./pages/AdminManagement";
 import WarrantyClaims from "./pages/WarrantyClaims";
+import Landing from "./pages/Landing";
 
 export default function App() {
   return <Routes>
+    <Route path="/" element={<Landing />} />
     <Route path="/login" element={<Login />} />
     <Route element={<ProtectedRoute />}>
       <Route element={<AppLayout />}>
-        <Route path="/" element={<RoleRoute roles={["ADMIN"]}><Dashboard /></RoleRoute>} />
+        <Route path="/dashboard" element={<RoleRoute roles={["ADMIN"]}><Dashboard /></RoleRoute>} />
         <Route path="/vehicles" element={<RoleRoute roles={["OWNER", "ADMIN"]}><Vehicles /></RoleRoute>} />
         <Route path="/repairs/create" element={<RoleRoute roles={["REPAIR_SHOP"]}><RepairCreate /></RoleRoute>} />
         <Route path="/history" element={<RoleRoute roles={["OWNER", "REPAIR_SHOP", "ADMIN"]}><History /></RoleRoute>} />
@@ -28,6 +30,6 @@ export default function App() {
         <Route path="/admin" element={<RoleRoute roles={["ADMIN"]}><AdminManagement /></RoleRoute>} />
       </Route>
     </Route>
-    <Route path="*" element={<Navigate to={localStorage.getItem("repair_token") ? homePathForRole(readCurrentUser()?.role) : "/login"} replace />} />
+    <Route path="*" element={<Navigate to={localStorage.getItem("repair_token") ? homePathForRole(readCurrentUser()?.role) : "/"} replace />} />
   </Routes>;
 }

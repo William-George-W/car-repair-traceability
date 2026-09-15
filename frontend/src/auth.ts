@@ -27,7 +27,7 @@ export function homePathForRole(role?: string): string {
   switch (role) {
     case "OWNER": return "/vehicles";
     case "REPAIR_SHOP": return "/repairs/create";
-    case "ADMIN": return "/";
+    case "ADMIN": return "/dashboard";
     default: return "/login";
   }
 }

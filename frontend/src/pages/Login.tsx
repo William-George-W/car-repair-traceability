@@ -1,4 +1,4 @@
-import { CheckCircleFilled, FileSearchOutlined, LinkOutlined, LockOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckCircleFilled, FileSearchOutlined, LinkOutlined, LockOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Radio, Tabs, Tag } from "antd";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -43,6 +43,6 @@ export default function Login() {
 
   return <div className="login-page"><div className="login-shell">
     <section className="login-showcase"><div className="login-brand-line"><span className="login-brand-mark"><SafetyCertificateOutlined /></span><div><strong>车维链</strong><span>维修记录控制台 · 01</span></div></div><div className="showcase-content"><Tag className="showcase-tag">可信维修档案系统</Tag><h1 className="showcase-title">每一笔维修<br /><span>都有据可查</span></h1><p className="showcase-desc">连接车主、维修商和管理人员，将维修详情与区块链存证结合，为每一笔服务建立可验证的数字凭证。</p><div className="feature-list"><div className="feature-item"><CheckCircleFilled /> 维修数据自动生成 SHA-256 摘要</div><div className="feature-item"><LinkOutlined /> RepairProof 合约保存关键证明</div><div className="feature-item"><FileSearchOutlined /> 质保状态与历史轨迹一站查询</div></div></div><div className="showcase-footer"><span>GETH 私有链 / CHAIN 1337</span><span>TRACE BUILD 2026</span></div></section>
-    <section className="login-form-panel"><div className="login-form-heading"><h2>欢迎回来</h2><p>登录可信维修数据空间，继续管理你的业务。</p></div><Tabs items={[{ key: "login", label: "登录", children: form(submitLogin) }, { key: "register", label: "注册", children: form(submitRegister, true) }]} /></section>
+    <section className="login-form-panel"><button className="login-back-home" type="button" onClick={() => navigate("/")}><ArrowLeftOutlined /> 返回首页</button><div className="login-form-heading"><h2>欢迎回来</h2><p>登录可信维修数据空间，继续管理你的业务。</p></div><Tabs items={[{ key: "login", label: "登录", children: form(submitLogin) }, { key: "register", label: "注册", children: form(submitRegister, true) }]} /></section>
   </div></div>;
 }
